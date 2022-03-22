@@ -70,12 +70,13 @@ for file_name in nature_files:
     销毁网络实例
     """
     datas = pd.read_csv(file_name)
+    # print(datas)
     predict_data = High_Polymer_Material(datas)
     predict_dataloader = DataLoader(predict_data, batch_size=1, shuffle=False)
 
     file_name = os.path.split(file_name)[1]
     file_name = os.path.splitext(file_name)[0]
-    # print(f"{file_name}\n-------------------------------")
+    print(f"{file_name}\n-------------------------------")
     weight_file_name = 'Data/Nature_Weight/NN_{}.pth'.format(file_name)
 
     predictor = YanNet()
@@ -95,6 +96,7 @@ for file_name in nature_files:
     total_min_y:0.000302043
     """
     print_p = print_p*0.066217957+0.000302043
+    print(print_p)
 
     drawer(file_name, print_p)
 

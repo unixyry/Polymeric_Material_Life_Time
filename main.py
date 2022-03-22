@@ -59,14 +59,14 @@ for i in range(0, len(nature_files)):
 参数统一存进字典arg中，传入Meta
 """
 
-learning_rate = 8*1e-2
-update_rate = 1*1e-3
-finetune_rate = 1*1e-4
-epochs = 1000
-learning_step = 1
+learning_rate = 2*1e-4
+update_rate = 5*1e-4
+finetune_rate = 8*1e-2
+epochs = 200
+learning_step = 4
 update_step = 1    #注意，外层循环的更新只能迭代一步
-finetune_step = 50
-ratio_train_test = 2
+finetune_step = 6
+ratio_train_test = 1
 
 arg = {'learning_rate': learning_rate, 'update_rate': update_rate, 'epochs': epochs, 'task_num': task_num,
        'learning_step': learning_step, 'update_step': update_step, 'ratio_train_test': ratio_train_test,
