@@ -255,10 +255,8 @@ class Meta(nn.Module):
                 prediction = prediction.squeeze(-1)  # 保证预测和标签维度一致
                 loss = self.compute_loss(prediction, y)
 
-                # self.finetune_optim.zero_grad()
                 finetune_optim.zero_grad()
                 loss.backward()
-                # self.finetune_optim.step()
                 finetune_optim.step()
 
                 loss_out = loss.item()

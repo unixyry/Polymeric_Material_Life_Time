@@ -62,10 +62,10 @@ for i in range(0, len(nature_files)):
 learning_rate = 8*1e-2
 update_rate = 1*1e-3
 finetune_rate = 1*1e-4
-epochs = 1
+epochs = 1000
 learning_step = 1
 update_step = 1    #注意，外层循环的更新只能迭代一步
-finetune_step = 10
+finetune_step = 50
 ratio_train_test = 2
 
 arg = {'learning_rate': learning_rate, 'update_rate': update_rate, 'epochs': epochs, 'task_num': task_num,
@@ -103,6 +103,10 @@ if __name__ == '__main__':
     """
     for file in nature_files:
         maml.FineTune(file)
+
+    """
+    预测阶段请运行Prediction
+    """
 
 
 
