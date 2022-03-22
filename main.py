@@ -15,7 +15,7 @@ from Leaner import YanNet
 所有输入数据文件存在'Nomal_Data'文件夹下
 地址使用Linux形式,地址划分使用'/'
 os.listdir()会将该文件夹下的所有的文件名放入到列表files中
-files存储了所有15个任务的绝对地址
+files存储了所有15个任务的绝对地址(拼接形式比较丑，但是能用)
 task_num是用于元学习训练阶段的任务数，设为12
 每个epoch打乱files,取前12个作为元学习的任务task_files
 """
@@ -24,9 +24,16 @@ input_file_path = os.path.join(data_path, 'Nomal_Data')
 files = os.listdir(input_file_path)
 for i in range(0, len(files)):
     files[i] = os.path.join(input_file_path, files[i])
+
 total_task_num = 15
 task_num = 12
 
+"""
+nature_files列表存储户外数据文件
+"""
+nature_files = ["GZ.csv", "HLR.csv", "LS.csv", "QD.csv", "QH.csv", "RQ.csv"]
+for i in range(0, len(nature_files)):
+    nature_files[i] = os.path.join(input_file_path, nature_files[i])
 
 
 
@@ -55,7 +62,7 @@ task_num = 12
 learning_rate = 8*1e-2
 update_rate = 1*1e-3
 finetune_rate = 1*1e-4
-epochs = 1000
+epochs = 1
 learning_step = 1
 update_step = 1    #注意，外层循环的更新只能迭代一步
 finetune_step = 10
@@ -94,7 +101,9 @@ if __name__ == '__main__':
     """
     Finetune阶段
     """
-    maml.FineTune("Data/Nomal_Data/GZ.CSV")
+    for file in nature_files:
+        maml.FineTune(file)
+
 
 
     print("Done!")

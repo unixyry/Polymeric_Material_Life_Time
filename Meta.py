@@ -278,6 +278,13 @@ class Meta(nn.Module):
             # test_loss /= num_batches
             print(f"{file_name}-test: {test_loss:>6f}")
 
+            """
+            存储权重
+            户外数据(共六个地点)的微调后权重存储在Data/Nature_Weight中
+            """
+            weight_file_name = 'Data/Nature_Weight/NN_{}.pth'.format(file_name)
+            torch.save(finetune_model.state_dict(), weight_file_name)
+
 
 
 
