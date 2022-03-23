@@ -9,8 +9,6 @@ from Dataset import High_Polymer_Material
 from Draw import drawer
 from Draw import split_nature
 
-
-
 """
 nature_files列表存储户外数据文件
 """
@@ -30,8 +28,7 @@ for i in range(0, len(nature_files)):
 定义预测的循环
 """
 def forecast_loop(dataloader, model, print_list):
-    # size = len(dataloader.dataset)
-    # num_batches = len(dataloader)
+
     """
     第一个样本的前向损失是固定的，从第二个开始修改
     :param dataloader:
@@ -39,13 +36,12 @@ def forecast_loop(dataloader, model, print_list):
     :param print_list: 有两个作用，1.存储每一次的预测值用于打印图像；2.记录前向损失，用于拼接输入特征
     :return:
     """
-    count = 0
+    count = 1
     with torch.no_grad():
-        for X, y in dataloader:
+        for batch, (X, y) in enumerate(dataloader):
             X, y = X.to(device), y.to(device)
             p = X.cpu().numpy()
-            if (count > 0):
-                p[0, 4] = print_list[count-1]
+            p[0, 4] = print_list[count-1]
             p = torch.from_numpy(p)
             p = p.to(device)
             prediction = model(p).item()
@@ -70,14 +66,15 @@ for file_name in nature_files:
     销毁网络实例
     """
     datas = pd.read_csv(file_name)
-    # print(datas)
-    predict_data = High_Polymer_Material(datas)
+    # 不再将第一条送入
+    predict_data = High_Polymer_Material(datas.iloc[1:])
     predict_dataloader = DataLoader(predict_data, batch_size=1, shuffle=False)
 
     file_name = os.path.split(file_name)[1]
     file_name = os.path.splitext(file_name)[0]
     print(f"{file_name}\n-------------------------------")
     weight_file_name = 'Data/Nature_Weight/NN_{}.pth'.format(file_name)
+    # print(datas)
 
     predictor = YanNet()
     predictor.load_state_dict(torch.load(weight_file_name))
@@ -85,7 +82,9 @@ for file_name in nature_files:
     predictor = predictor.to(device)
     predictor = predictor.double()
 
-    print_p = np.zeros(len(predict_dataloader))
+    print_p = np.zeros(datas.shape[0])
+    print_p[0] = datas.iloc[0, 5]
+    # print(print_p)
 
     forecast_loop(predict_dataloader, predictor, print_p)
     # print(print_p)
@@ -95,7 +94,7 @@ for file_name in nature_files:
     total_nomal_y:0.066217957
     total_min_y:0.000302043
     """
-    print_p = print_p*0.066217957+0.000302043
+    print_p = print_p*0.01749006+0.01961687
     print(print_p)
 
     drawer(file_name, print_p)

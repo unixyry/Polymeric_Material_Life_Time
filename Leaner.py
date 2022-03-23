@@ -12,7 +12,7 @@ class D1(nn.Module):
 
         self.d1 = nn.Sequential(OrderedDict([
             ('dense_1', nn.Linear(5, 5)),
-            ('sigmoid', nn.Sigmoid())
+            ('relu', nn.ReLU())
         ]))
 
     def forward(self, input):
@@ -26,8 +26,7 @@ class D2(nn.Module):
         super(D2, self).__init__()
 
         self.d2 = nn.Sequential(OrderedDict([
-            ('dense_2', nn.Linear(5, 1)),
-            ('relu', nn.ReLU())
+            ('dense_2', nn.Linear(5, 1))
         ]))
 
     def forward(self, input):

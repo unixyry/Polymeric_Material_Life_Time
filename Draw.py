@@ -10,6 +10,7 @@ np.set_printoptions(suppress=True)
 warnings.filterwarnings("ignore")
 path = 'Data/Draw'
 
+
 def split_nature():
     """
     file_path: 'Data/Draw/Data'，所有数据型文件都存储在这个文件下，包括未划分的'new_data.xlsx'，和已划分的
@@ -20,8 +21,6 @@ def split_nature():
     file_name = os.path.join(file_path, 'new_data.xlsx')
     xlsx = pd.ExcelFile(file_name)
     frame_natural = pd.read_excel(xlsx, '户外损失')
-    # Dataframe的索引从1开始
-    frame_natural.index += 1
     # 将dataframe转为numpy，便于处理数据
     dataset_natural = frame_natural.values
     # 拼接
@@ -40,6 +39,39 @@ def split_nature():
     np.savetxt(os.path.join(file_path, 'LS.csv'), LS, fmt="%f", delimiter=",")
     np.savetxt(os.path.join(file_path, 'QD.csv'), QD, fmt="%f", delimiter=",")
     np.savetxt(os.path.join(file_path, 'HLR.csv'), HLR, fmt="%f", delimiter=",")
+
+
+def split_home():
+    file_path = os.path.join(path, 'Data')
+    file_name = os.path.join(file_path, 'new_data.xlsx')
+    xlsx = pd.ExcelFile(file_name)
+    frame_home = pd.read_excel(xlsx, '室内加速')
+    # 将dataframe转为numpy，便于处理数据
+    dataset_home = frame_home.values
+    # 拼接
+    draw_home = np.stack((dataset_home[:, 4], dataset_home[:, 6]), axis=1)
+    # 切割
+    One = draw_home[0:10, :]
+    Two = draw_home[10:22, :]
+    Three = draw_home[22:32, :]
+    Four = draw_home[32:42, :]
+    Five = draw_home[42:52, :]
+    Six = draw_home[52:62, :]
+    Seven = draw_home[62:71, :]
+    Eight = draw_home[71:81, :]
+    Nine = draw_home[81:90, :]
+
+    np.savetxt(os.path.join(file_path, 'One.csv'), One, fmt="%f", delimiter=",")
+    np.savetxt(os.path.join(file_path, 'Two.csv'), Two, fmt="%f", delimiter=",")
+    np.savetxt(os.path.join(file_path, 'Three.csv'), Three, fmt="%f", delimiter=",")
+    np.savetxt(os.path.join(file_path, 'Four.csv'), Four, fmt="%f", delimiter=",")
+    np.savetxt(os.path.join(file_path, 'Five.csv'), Five, fmt="%f", delimiter=",")
+    np.savetxt(os.path.join(file_path, 'Six.csv'), Six, fmt="%f", delimiter=",")
+    np.savetxt(os.path.join(file_path, 'Seven.csv'), Seven, fmt="%f", delimiter=",")
+    np.savetxt(os.path.join(file_path, 'Eight.csv'), Eight, fmt="%f", delimiter=",")
+    np.savetxt(os.path.join(file_path, 'Nine.csv'), Nine, fmt="%f", delimiter=",")
+
+
 
 def drawer(file_name, print_p):
     """
@@ -62,11 +94,11 @@ def drawer(file_name, print_p):
     plt.rcParams['figure.figsize'] = (10.0, 8.0)
     fig = plt.figure(figsize=(8, 8.5))
     picture = fig.add_subplot(1, 1, 1)
-    picture.plot(time, print_p, color='r', label='Forecast_QH')
+    picture.plot(time, print_p, color='r', label='Forecast_{}'.format(file_name))
     ticks = picture.set_xticks([0, 1, 3, 6, 12, 18, 24])
     picture.set_title(file_name)
     prediction = fig.add_subplot(1, 1, 1)
-    prediction.plot(raw_x, raw_y, color='c', label='Reality_QH')
+    prediction.plot(raw_x, raw_y, color='c', label='Reality_{}'.format(file_name))
     plt.legend(loc='upper left')
     # 保存图片
     picture_path = os.path.join(path, 'Picture')
